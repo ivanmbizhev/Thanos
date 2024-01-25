@@ -1,0 +1,66 @@
+app:
+  project: cpaas-monitoring
+  environment: "thanos"
+  name: "kube-prometheus-stack"
+
+grafana:
+  enabled: true
+  service:
+    type: LoadBalancer
+
+# prometheus.yaml 
+
+alertmanager:
+  enabled: true
+
+prometheus:
+  thanosService:
+    enabled: true
+  
+  thanosServiceMonitor:
+    enabled: true
+    interval: 5s
+
+  #Enabling this creates a service to expose thanos-sidecar outside the cluster.
+  thanosServiceExternal:
+    enabled: true
+   
+  prometheusSpec:
+    thanos:
+      baseImage: quay.io/thanos/thanos
+      version: v0.32.2
+      objectStorageConfig:
+        key: thanos.yaml
+        name: thanos-objstore-config
+    externalLabels:
+      cluster: "thanos-cluster"
+
+# thanosRuler:
+#   thanosRulerSpec:
+#     alertmanagersConfig:
+#       key: alertmanager-configs.yaml
+#       name: thanosruler-alertmanager-config
+#     objectStorageConfig: |-
+#       type: AZURE
+#       config:
+#         storage_account: 'linkthanos'
+#         storage_account_key: 'MxUoyD3y6g2IvtntCazc+gV9ovHCqEk7DO8yWRRvrmp5ZA9s8oOPjb+3OxA+uoMbvsMs5w5LztWx+AStPXY8jg=='
+#         container: 'thanos-container'
+#     ruleSelector:
+#       matchLabels:
+#         app: ruler
+#     volumes:
+#       - name: object-storage
+#         secret:
+#           secretName: general-objstore-secret
+#     queryEndpoints:
+#     - http://global-thanos-query-dns
+#   extraSecret:
+#     name: thanosruler-alertmanager-config
+#     data:
+#       alertmanager-configs.yaml: |
+#         alertmanagers:
+#         - static_configs: ["alertmanager-dns"]
+#           scheme: http
+#           timeout: 30s
+#           api_version: v1

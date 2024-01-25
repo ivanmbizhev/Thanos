@@ -1,0 +1,37 @@
+# prometheus.yaml 
+
+grafana:
+  enabled: false
+
+alertmanager:
+  enabled: false
+
+prometheus:
+  thanosService:
+    enabled: true
+    type: ClusterIP
+   
+  thanosServiceMonitor:
+    enabled: true
+    interval: 5s
+
+  # Enabling this creates a service to expose thanos-sidecar outside the cluster.
+  # thanosServiceExternal:
+  #   enabled: false
+  #   type: LoadBalancer
+   
+  # prometheusSpec:
+  #   thanos:
+  #     objectStorageConfig:
+  #       key: thanos.yaml
+  #       name: thanos-objstore-config
+   
+prometheusOperator:
+  thanosImage:
+    registry: quay.io
+    repository: thanos/thanos
+    tag: v0.32.2
+   
+kubelet:
+  serviceMonitor:
+    https: false

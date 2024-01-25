@@ -1,0 +1,62 @@
+app:
+  project: cpaas-monitoring
+  environment: "thanos"
+  name: "thanos"
+
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+  namespace: "monitoring"
+
+objstoreConfig: |-
+  type: AZURE
+  config:
+    storage_account: 'linkthanos'
+    storage_account_key: 'MxUoyD3y6g2IvtntCazc+gV9ovHCqEk7DO8yWRRvrmp5ZA9s8oOPjb+3OxA+uoMbvsMs5w5LztWx+AStPXY8jg=='
+    container: 'thanos-container'
+storegateway:
+  enabled: true # Set to true to enable the Store Gateway
+compactor:
+  enabled: true
+bucketweb:
+  enabled: true
+query:
+  stores:
+    - 104.45.74.92:10901
+    - 20.23.145.11:10901
+    - 20.79.140.198:10901
+  replicaLabel: prometheus_replica
+  dnsDiscovery:
+    enabled: true
+    sidecarsService: "kube-prometheus-stack-thanos-discovery"
+    sidecarsNamespace: "*"
+ruler:
+  enabled: true
+  alertmanagers:
+    - http://kube-prometheus-stack-alertmanager.monitoring.svc.cluster.local:9093
+
+  
+  existingConfigmap: thanos-ruler-config
+  # config: |-
+  #   groups:
+  #     - name: "metamonitoring"
+  #       rules:
+  #         - alert: "PrometheusDown"
+  #           expr: absent(up{prometheus="monitoring/prometheus-operator"})
+  #     - name: "warn strategy"
+  #       partial_response_strategy: "warn"
+  #       rules:
+  #       - alert: "some"
+  #         expr: "up"
+  #     - name: "abort strategy"
+  #       partial_response_strategy: "abort"
+  #       rules:
+  #       - alert: "some"
+  #         expr: "up"
+  #     - name: "by default strategy is abort"
+  #       rules:
+  #       - alert: "some"
+  #         expr: "up"
+      
+ 

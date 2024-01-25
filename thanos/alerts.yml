@@ -1,0 +1,19 @@
+groups:
+  - name: "metamonitoring"
+    rules:
+      - alert: "PrometheusDown"
+        expr: absent(up{prometheus="monitoring/prometheus-operator"})
+  - name: "warn strategy"
+    partial_response_strategy: "warn"
+    rules:
+    - alert: "some"
+      expr: "up"
+  - name: "abort strategy"
+    partial_response_strategy: "abort"
+    rules:
+    - alert: "some"
+      expr: "up"
+  - name: "by default strategy is abort"
+    rules:
+    - alert: "some"
+      expr: "up"

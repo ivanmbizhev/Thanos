@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: cpaas-monitoring
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - name: thanos
+            repoURL: git@ssh.dev.azure.com:v3/linkmobilitygroup/DevOps%20Group/LinkMobility.CPaaS.Thanos
+            path: thanos
+            cluster: https://cpass-thanos-cluster-aks-h4x5ga2l.hcp.westeurope.azmk8s.io:443
+            namespace: "observability"
+            targetRevision: master
+            valueFile: env/thanos.yaml
+  template:
+    metadata:
+      name: '{{name}}'
+      labels:
+        name: '{{name}}'
+        namespace: '{{namespace}}'
+    spec:
+      project: default
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+        
+      source:
+        repoURL: '{{repoURL}}'
+        path: '{{path}}'
+        targetRevision: '{{targetRevision}}'
+        helm:
+          valueFiles:
+            - '{{valueFile}}'
+      destination:
+        server: '{{cluster}}'
+        namespace: '{{namespace}}'
