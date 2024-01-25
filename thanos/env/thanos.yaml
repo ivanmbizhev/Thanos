@@ -12,8 +12,8 @@ metrics:
 objstoreConfig: |-
   type: AZURE
   config:
-    storage_account: 'linkthanos'
-    storage_account_key: 'MxUoyD3y6g2IvtntCazc+gV9ovHCqEk7DO8yWRRvrmp5ZA9s8oOPjb+3OxA+uoMbvsMs5w5LztWx+AStPXY8jg=='
+    storage_account: ''
+    storage_account_key: '='
     container: 'thanos-container'
 storegateway:
   enabled: true # Set to true to enable the Store Gateway
@@ -23,9 +23,9 @@ bucketweb:
   enabled: true
 query:
   stores:
-    - 104.45.74.92:10901
-    - 20.23.145.11:10901
-    - 20.79.140.198:10901
+    - 10.0.0.1:10901
+    - 10.0.0.2:10901
+    - 10.0.0.3:10901
   replicaLabel: prometheus_replica
   dnsDiscovery:
     enabled: true
