@@ -8,9 +8,9 @@ spec:
     - list:
         elements:
           - name: thanos
-            repoURL: git@ssh.dev.azure.com:v3/linkmobilitygroup/DevOps%20Group/LinkMobility.CPaaS.Thanos
+            repoURL: 
             path: thanos
-            cluster: https://cpass-thanos-cluster-aks-h4x5ga2l.hcp.westeurope.azmk8s.io:443
+            cluster: 
             namespace: "observability"
             targetRevision: master
             valueFile: env/thanos.yaml

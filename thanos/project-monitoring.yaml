@@ -12,12 +12,12 @@ spec:
 
   # Allow manifests to deploy from any Git repos
   sourceRepos:
-  - 'git@ssh.dev.azure.com:v3/linkmobilitygroup/DevOps%20Group/LinkMobility.CPaaS.Thanos'
+  - 
 
   # Only permit applications to deploy to the guestbook namespace in the same cluster
   destinations:
   - namespace: '*'
-    server: https://cpass-thanos-cluster-aks-h4x5ga2l.hcp.westeurope.azmk8s.io:443
+    server: 
 
   # Deny all cluster-scoped resources from being created, except for Namespace
   clusterResourceWhitelist:
