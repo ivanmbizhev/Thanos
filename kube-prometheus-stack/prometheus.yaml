@@ -1,5 +1,5 @@
 app:
-  project: cpaas-monitoring
+  project: monitoring
   environment: "thanos"
   name: "kube-prometheus-stack"
 

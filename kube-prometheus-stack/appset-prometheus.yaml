@@ -1,16 +1,16 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: cpaas-prometheus
+  name: prometheus
   namespace: argocd
 spec:
   generators:
     - list:
         elements:
           - name: kube-prometheus-stack
-            repoURL: git@ssh.dev.azure.com:v3/linkmobilitygroup/DevOps%20Group/LinkMobility.CPaaS.Thanos
+            repoURL: 
             path: kube-prometheus-stack
-            cluster: https://cpass-thanos-cluster-aks-h4x5ga2l.hcp.westeurope.azmk8s.io:443
+            cluster: 
             namespace: "monitoring"
             targetRevision: master
             valueFile: prometheus.yaml

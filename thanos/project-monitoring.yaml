@@ -1,14 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
-  name: cpaas-monitoring
+  name: monitoring
   namespace: argocd
   # Finalizer that ensures that project is not deleted until it is not referenced by any application
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   # Project description
-  description: Linkmobility CPaaS Project for Monitoring 
+  description: 
 
   # Allow manifests to deploy from any Git repos
   sourceRepos:
