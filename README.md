@@ -1,0 +1,1 @@
+This project was made with the idea to centralize the monitoring of several kubernetes clusters. I have made some changes to the kube-prom deployment to add a persistent volume to Grafana to avoid losing any dashboards and Ill be adding a way to sso into grafana using Azure AD(entra id)
