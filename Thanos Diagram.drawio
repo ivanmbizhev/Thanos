@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2024-04-21T10:49:11.882Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36" etag="AWJ_yp7SrIi3hTOA1mwT" version="24.2.7" type="github">
+<mxfile host="app.diagrams.net" modified="2024-04-21T10:50:06.362Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36" etag="yXMQdVIrk0JjbFxWmnP3" version="24.2.7" type="github">
   <diagram name="Page-1" id="RApj-0nbQO1Q3FxsVnuJ">
     <mxGraphModel dx="1026" dy="650" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -8,7 +8,7 @@
           <mxGeometry x="20" y="150" width="300" height="350" as="geometry" />
         </mxCell>
         <mxCell id="sZqguTcHC14YNJKMhpEw-4" value="" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/compute/Kubernetes_Services.svg;" vertex="1" parent="1">
-          <mxGeometry x="40" y="170" width="68" height="60" as="geometry" />
+          <mxGeometry x="30" y="160" width="45.33" height="40" as="geometry" />
         </mxCell>
         <mxCell id="sZqguTcHC14YNJKMhpEw-5" value="" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeColor=none;fillColor=#00BEF2;shape=mxgraph.azure.storage_blob;" vertex="1" parent="1">
           <mxGeometry x="400" y="40" width="95" height="80" as="geometry" />
@@ -27,6 +27,9 @@
         </mxCell>
         <mxCell id="sZqguTcHC14YNJKMhpEw-10" value="" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/compute/Kubernetes_Services.svg;" vertex="1" parent="1">
           <mxGeometry x="600" y="350" width="45.33" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="sZqguTcHC14YNJKMhpEw-11" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://static-00.iconduck.com/assets.00/thanos-icon-2048x2048-fk3fewoq.png;" vertex="1" parent="1">
+          <mxGeometry x="30" y="260" width="70" height="70" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
