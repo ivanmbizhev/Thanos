@@ -1,53 +1,148 @@
-<mxfile host="app.diagrams.net" modified="2024-04-21T10:59:26.511Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36" etag="fulDUDO3BIAdeNA3888q" version="24.2.7" type="github">
+<mxfile host="app.diagrams.net" modified="2024-05-27T18:28:52.937Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" etag="N1eyycgp-bdoFS7HAR5b" version="24.3.1" type="github">
   <diagram name="Page-1" id="RApj-0nbQO1Q3FxsVnuJ">
     <mxGraphModel dx="1026" dy="650" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="sZqguTcHC14YNJKMhpEw-3" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="20" y="150" width="330" height="470" as="geometry" />
+        <mxCell id="sZqguTcHC14YNJKMhpEw-3" value="" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="20" y="80" width="330" height="470" as="geometry" />
         </mxCell>
-        <mxCell id="sZqguTcHC14YNJKMhpEw-4" value="" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/compute/Kubernetes_Services.svg;" vertex="1" parent="1">
-          <mxGeometry x="30" y="160" width="45.33" height="40" as="geometry" />
+        <mxCell id="sZqguTcHC14YNJKMhpEw-4" value="" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/compute/Kubernetes_Services.svg;" parent="1" vertex="1">
+          <mxGeometry x="30" y="100" width="34" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="sZqguTcHC14YNJKMhpEw-5" value="" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeColor=none;fillColor=#00BEF2;shape=mxgraph.azure.storage_blob;" vertex="1" parent="1">
-          <mxGeometry x="400" y="40" width="95" height="80" as="geometry" />
+        <mxCell id="sZqguTcHC14YNJKMhpEw-5" value="" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeColor=none;fillColor=#00BEF2;shape=mxgraph.azure.storage_blob;" parent="1" vertex="1">
+          <mxGeometry x="460" y="80" width="95" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="sZqguTcHC14YNJKMhpEw-6" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="600" y="150" width="130" height="150" as="geometry" />
+        <mxCell id="sZqguTcHC14YNJKMhpEw-6" value="" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="670" y="115" width="130" height="150" as="geometry" />
         </mxCell>
-        <mxCell id="sZqguTcHC14YNJKMhpEw-7" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="600" y="340" width="130" height="150" as="geometry" />
+        <mxCell id="sZqguTcHC14YNJKMhpEw-7" value="" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="670" y="349.5" width="130" height="150" as="geometry" />
         </mxCell>
-        <mxCell id="sZqguTcHC14YNJKMhpEw-8" value="" style="shape=image;html=1;verticalAlign=top;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;imageAspect=0;aspect=fixed;image=https://cdn2.iconfinder.com/data/icons/social-media-2285/512/1_Slack_colored_svg-128.png" vertex="1" parent="1">
-          <mxGeometry x="400" y="515" width="70" height="70" as="geometry" />
+        <mxCell id="sZqguTcHC14YNJKMhpEw-8" value="" style="shape=image;html=1;verticalAlign=top;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;imageAspect=0;aspect=fixed;image=https://cdn2.iconfinder.com/data/icons/social-media-2285/512/1_Slack_colored_svg-128.png" parent="1" vertex="1">
+          <mxGeometry x="472.5" y="429.5" width="70" height="70" as="geometry" />
         </mxCell>
-        <mxCell id="sZqguTcHC14YNJKMhpEw-9" value="" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/compute/Kubernetes_Services.svg;" vertex="1" parent="1">
-          <mxGeometry x="600" y="160" width="45.33" height="40" as="geometry" />
+        <mxCell id="sZqguTcHC14YNJKMhpEw-9" value="" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/compute/Kubernetes_Services.svg;" parent="1" vertex="1">
+          <mxGeometry x="670" y="125" width="34" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="sZqguTcHC14YNJKMhpEw-10" value="" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/compute/Kubernetes_Services.svg;" vertex="1" parent="1">
-          <mxGeometry x="600" y="350" width="45.33" height="40" as="geometry" />
+        <mxCell id="sZqguTcHC14YNJKMhpEw-10" value="" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/compute/Kubernetes_Services.svg;" parent="1" vertex="1">
+          <mxGeometry x="670" y="359.5" width="34" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="sZqguTcHC14YNJKMhpEw-11" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://static-00.iconduck.com/assets.00/thanos-icon-2048x2048-fk3fewoq.png;" vertex="1" parent="1">
-          <mxGeometry x="30" y="290" width="70" height="70" as="geometry" />
+        <mxCell id="sZqguTcHC14YNJKMhpEw-11" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://static-00.iconduck.com/assets.00/thanos-icon-2048x2048-fk3fewoq.png;" parent="1" vertex="1">
+          <mxGeometry x="40" y="287.5" width="70" height="70" as="geometry" />
         </mxCell>
-        <mxCell id="sZqguTcHC14YNJKMhpEw-12" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="220" y="175" width="90" height="100" as="geometry" />
+        <mxCell id="sZqguTcHC14YNJKMhpEw-12" value="" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="220" y="115" width="100" height="115" as="geometry" />
         </mxCell>
-        <mxCell id="sZqguTcHC14YNJKMhpEw-13" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://static-00.iconduck.com/assets.00/thanos-icon-2048x2048-fk3fewoq.png;" vertex="1" parent="1">
-          <mxGeometry x="230" y="315" width="45" height="45" as="geometry" />
+        <mxCell id="sZqguTcHC14YNJKMhpEw-13" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://static-00.iconduck.com/assets.00/thanos-icon-2048x2048-fk3fewoq.png;" parent="1" vertex="1">
+          <mxGeometry x="230" y="242.5" width="45" height="45" as="geometry" />
         </mxCell>
-        <mxCell id="sZqguTcHC14YNJKMhpEw-14" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="220" y="380" width="110" height="50" as="geometry" />
+        <mxCell id="sZqguTcHC14YNJKMhpEw-14" value="Thanos-Query" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="220" y="320" width="110" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="sZqguTcHC14YNJKMhpEw-15" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="220" y="460" width="110" height="50" as="geometry" />
+        <mxCell id="XJaKJMAvGqsHAcfkMpIT-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="sZqguTcHC14YNJKMhpEw-16" target="XJaKJMAvGqsHAcfkMpIT-18">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="sZqguTcHC14YNJKMhpEw-16" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://static-00.iconduck.com/assets.00/thanos-icon-2048x2048-fk3fewoq.png;" vertex="1" parent="1">
-          <mxGeometry x="40" y="525" width="50" height="50" as="geometry" />
+        <mxCell id="XJaKJMAvGqsHAcfkMpIT-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="sZqguTcHC14YNJKMhpEw-16" target="sZqguTcHC14YNJKMhpEw-11">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="sZqguTcHC14YNJKMhpEw-17" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://devopy.io/wp-content/uploads/2019/02/bell_260.svg;" vertex="1" parent="1">
-          <mxGeometry x="230" y="525" width="55" height="55" as="geometry" />
+        <mxCell id="sZqguTcHC14YNJKMhpEw-16" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://static-00.iconduck.com/assets.00/thanos-icon-2048x2048-fk3fewoq.png;" parent="1" vertex="1">
+          <mxGeometry x="40" y="420" width="70" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="sZqguTcHC14YNJKMhpEw-17" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://devopy.io/wp-content/uploads/2019/02/bell_260.svg;" parent="1" vertex="1">
+          <mxGeometry x="230" y="465" width="55" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="XJaKJMAvGqsHAcfkMpIT-2" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Prometheus_software_logo.svg/1200px-Prometheus_software_logo.svg.png;" vertex="1" parent="1">
+          <mxGeometry x="270" y="170" width="34.79" height="34.5" as="geometry" />
+        </mxCell>
+        <mxCell id="XJaKJMAvGqsHAcfkMpIT-3" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Prometheus_software_logo.svg/1200px-Prometheus_software_logo.svg.png;" vertex="1" parent="1">
+          <mxGeometry x="690" y="439.5" width="34.79" height="34.5" as="geometry" />
+        </mxCell>
+        <mxCell id="XJaKJMAvGqsHAcfkMpIT-4" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Prometheus_software_logo.svg/1200px-Prometheus_software_logo.svg.png;" vertex="1" parent="1">
+          <mxGeometry x="700" y="205.5" width="34.79" height="34.5" as="geometry" />
+        </mxCell>
+        <mxCell id="XJaKJMAvGqsHAcfkMpIT-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="XJaKJMAvGqsHAcfkMpIT-3" target="XJaKJMAvGqsHAcfkMpIT-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="XJaKJMAvGqsHAcfkMpIT-6" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://static-00.iconduck.com/assets.00/thanos-icon-2048x2048-fk3fewoq.png;" vertex="1" parent="1">
+          <mxGeometry x="740" y="207.75" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="XJaKJMAvGqsHAcfkMpIT-7" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="685" y="190" width="100" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="XJaKJMAvGqsHAcfkMpIT-8" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="680" y="419.5" width="100" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="XJaKJMAvGqsHAcfkMpIT-9" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="229.58" y="164.5" width="80.42" height="45.5" as="geometry" />
+        </mxCell>
+        <mxCell id="XJaKJMAvGqsHAcfkMpIT-11" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://static-00.iconduck.com/assets.00/thanos-icon-2048x2048-fk3fewoq.png;" vertex="1" parent="1">
+          <mxGeometry x="734.79" y="439.5" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="XJaKJMAvGqsHAcfkMpIT-12" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://static-00.iconduck.com/assets.00/thanos-icon-2048x2048-fk3fewoq.png;" vertex="1" parent="1">
+          <mxGeometry x="237.5" y="172.25" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="XJaKJMAvGqsHAcfkMpIT-13" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="XJaKJMAvGqsHAcfkMpIT-9" target="sZqguTcHC14YNJKMhpEw-5">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="330" as="sourcePoint" />
+            <mxPoint x="450" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XJaKJMAvGqsHAcfkMpIT-14" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.179;entryY=0.95;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="sZqguTcHC14YNJKMhpEw-13" target="sZqguTcHC14YNJKMhpEw-5">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="330" as="sourcePoint" />
+            <mxPoint x="450" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XJaKJMAvGqsHAcfkMpIT-15" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="sZqguTcHC14YNJKMhpEw-11" target="sZqguTcHC14YNJKMhpEw-14">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="330" as="sourcePoint" />
+            <mxPoint x="450" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XJaKJMAvGqsHAcfkMpIT-18" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://www.svgrepo.com/show/354219/prometheus.svg;" vertex="1" parent="1">
+          <mxGeometry x="247.29" y="420" width="70" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="XJaKJMAvGqsHAcfkMpIT-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.014;entryY=0.357;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="XJaKJMAvGqsHAcfkMpIT-18" target="sZqguTcHC14YNJKMhpEw-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="XJaKJMAvGqsHAcfkMpIT-23" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://upload.wikimedia.org/wikipedia/commons/thumb/archive/a/a1/20230113183100%21Grafana_logo.svg/118px-Grafana_logo.svg.png;" vertex="1" parent="1">
+          <mxGeometry x="70" y="115" width="98.33" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="XJaKJMAvGqsHAcfkMpIT-24" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryX=0.25;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="sZqguTcHC14YNJKMhpEw-11" target="XJaKJMAvGqsHAcfkMpIT-23">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="330" as="sourcePoint" />
+            <mxPoint x="450" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XJaKJMAvGqsHAcfkMpIT-25" value="Query" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="45" y="255" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="XJaKJMAvGqsHAcfkMpIT-26" value="Ruler" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="45" y="390" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="XJaKJMAvGqsHAcfkMpIT-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="XJaKJMAvGqsHAcfkMpIT-7" target="sZqguTcHC14YNJKMhpEw-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="XJaKJMAvGqsHAcfkMpIT-29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=0;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="XJaKJMAvGqsHAcfkMpIT-8" target="sZqguTcHC14YNJKMhpEw-5">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="705" y="310" />
+              <mxPoint x="531" y="310" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XJaKJMAvGqsHAcfkMpIT-30" value="Thanos Cluster" style="text;strokeColor=none;fillColor=none;html=1;fontSize=24;fontStyle=1;verticalAlign=middle;align=center;" vertex="1" parent="1">
+          <mxGeometry x="130" y="40" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="XJaKJMAvGqsHAcfkMpIT-31" value="Cpaas Cluster" style="text;strokeColor=none;fillColor=none;html=1;fontSize=24;fontStyle=1;verticalAlign=middle;align=center;" vertex="1" parent="1">
+          <mxGeometry x="680" y="70" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="XJaKJMAvGqsHAcfkMpIT-32" value="Cpaas Cluster" style="text;strokeColor=none;fillColor=none;html=1;fontSize=24;fontStyle=1;verticalAlign=middle;align=center;" vertex="1" parent="1">
+          <mxGeometry x="685" y="510" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="XJaKJMAvGqsHAcfkMpIT-33" value="Blob Storage" style="text;strokeColor=none;fillColor=none;html=1;fontSize=24;fontStyle=1;verticalAlign=middle;align=center;" vertex="1" parent="1">
+          <mxGeometry x="460" y="30" width="100" height="40" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
