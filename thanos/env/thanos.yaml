@@ -7,56 +7,79 @@ metrics:
   enabled: true
   serviceMonitor:
     enabled: true
-  namespace: "monitoring"
+    namespace: "monitoring"
+    labels: 
+      release: "kube-prometheus-stack"
 
 objstoreConfig: |-
   type: AZURE
   config:
     storage_account: ''
-    storage_account_key: '='
-    container: 'thanos-container'
+    storage_account_key: ''
+    container: ''
 storegateway:
   enabled: true # Set to true to enable the Store Gateway
+  replicaCount: 2
+  persistence:
+    size: 20Gi
+  # resourcesPreset: "2xlarge"
+  resources:
+    requests:
+      cpu: 2
+      ephemeral-storage: 50Mi
+      memory: 4Gi
+    limits:
+      cpu: 4
+      ephemeral-storage: 1Gi
+      memory: 10Gi
+  sharded:
+    enabled: false
+  readinessProbe:
+    timeoutSeconds: 60
 compactor:
   enabled: true
+  resourcesPreset: "large"
+  persistence:
+    size: 20Gi
+  retentionResolutionRaw: 60d
+  retentionResolution5m: 90d
+  retentionResolution1h: 90d
 bucketweb:
   enabled: true
+  resourcesPreset: "medium"
 query:
-  stores:
-    - 10.0.0.1:10901
-    - 10.0.0.2:10901
-    - 10.0.0.3:10901
+  extraFlags:
+    - --query.auto-downsampling
+  stores: # Here you can add all of the cluster we'll be monitoring. The ip is the kube-prometheus-stack-thanos-external's external-ip
+    - 0.0.0.0:10901 # dev-reg
   replicaLabel: prometheus_replica
   dnsDiscovery:
     enabled: true
     sidecarsService: "kube-prometheus-stack-thanos-discovery"
-    sidecarsNamespace: "*"
+    sidecarsNamespace: "monitoring"
+  # Resources - increase if needed.
+  # resourcesPreset: "xlarge"
+  resources:
+    requests:
+      cpu: 2
+      ephemeral-storage: 50Mi
+      memory: 4Gi
+    limits:
+      cpu: 4
+      ephemeral-storage: 1Gi
+      memory: 10Gi
+  replicaCount: 2
+
+queryFrontend:
+  resourcesPreset: "xlarge"
+  service:
+    type: NodePort
+
 ruler:
   enabled: true
   alertmanagers:
     - http://kube-prometheus-stack-alertmanager.monitoring.svc.cluster.local:9093
-
-  
-  existingConfigmap: thanos-ruler-config
-  # config: |-
-  #   groups:
-  #     - name: "metamonitoring"
-  #       rules:
-  #         - alert: "PrometheusDown"
-  #           expr: absent(up{prometheus="monitoring/prometheus-operator"})
-  #     - name: "warn strategy"
-  #       partial_response_strategy: "warn"
-  #       rules:
-  #       - alert: "some"
-  #         expr: "up"
-  #     - name: "abort strategy"
-  #       partial_response_strategy: "abort"
-  #       rules:
-  #       - alert: "some"
-  #         expr: "up"
-  #     - name: "by default strategy is abort"
-  #       rules:
-  #       - alert: "some"
-  #         expr: "up"
-      
- 
+  existingConfigmap: "thanos-ruler-config"
+  resourcesPreset: "large"
+  service:
+    type: NodePort
