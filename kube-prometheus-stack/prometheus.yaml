@@ -1,66 +1,182 @@
 app:
-  project: monitoring
+  project: cpaas-monitoring
   environment: "thanos"
   name: "kube-prometheus-stack"
 
-grafana:
-  enabled: true
-  service:
-    type: LoadBalancer
+env: thanos
 
-# prometheus.yaml 
-
-alertmanager:
-  enabled: true
-
-prometheus:
-  thanosService:
+kube-prometheus-stack:
+  grafana:
     enabled: true
-  
-  thanosServiceMonitor:
-    enabled: true
-    interval: 5s
+    # resources: 
+    #   limits:
+    #     cpu: 100m
+    #     memory: 128Mi
+    #   requests:
+    #     cpu: 100m
+    #     memory: 128Mi
+    defaultDashboardsEnabled: true
+    defaultDashboardsTimezone: utc
+    service:
+      type: NodePort
+      annotations: 
+        # service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+  # prometheus.yaml 
+    persistence:
+      enabled: true
+      type: pvc
+      size: 5G
+    grafana.ini:
+      server: 
+        root_url: https://grafana./
+      auth.azuread:
+        name: Azure AD
+        enabled: true
+        allow_sign_up: true
+        auto_login: false
+        client_id: 
+        client_secret: 
+        scopes: openid email profile
+        auth_url: 
+        token_url: 
+        role_attribute_strict: false
+        # allow_assign_grafana_admin: false
+        # skip_org_role_sync: false
+    assertNoLeakedSecrets: false
+    dashboardProviders:
+        dashboardproviders.yaml:
+          apiVersion: 1
+          providers:
+          - name: 'grafana-dashboards-kubernetes'
+            orgId: 1
+            folder: 'Kubernetes'
+            type: file
+            disableDeletion: true
+            editable: true
+            options:
+              path: /var/lib/grafana/dashboards/grafana-dashboards-kubernetes
+    dashboards:
 
-  #Enabling this creates a service to expose thanos-sidecar outside the cluster.
-  thanosServiceExternal:
-    enabled: true
-   
-  prometheusSpec:
-    thanos:
-      baseImage: quay.io/thanos/thanos
-      version: v0.32.2
-      objectStorageConfig:
-        key: thanos.yaml
-        name: thanos-objstore-config
-    externalLabels:
-      cluster: "thanos-cluster"
 
-# thanosRuler:
-#   thanosRulerSpec:
-#     alertmanagersConfig:
-#       key: alertmanager-configs.yaml
-#       name: thanosruler-alertmanager-config
-#     objectStorageConfig: |-
-#       type: AZURE
-#       config:
-#         storage_account: 'linkthanos'
-#         storage_account_key: 'MxUoyD3y6g2IvtntCazc+gV9ovHCqEk7DO8yWRRvrmp5ZA9s8oOPjb+3OxA+uoMbvsMs5w5LztWx+AStPXY8jg=='
-#         container: 'thanos-container'
-#     ruleSelector:
-#       matchLabels:
-#         app: ruler
-#     volumes:
-#       - name: object-storage
-#         secret:
-#           secretName: general-objstore-secret
-#     queryEndpoints:
-#     - http://global-thanos-query-dns
-#   extraSecret:
-#     name: thanosruler-alertmanager-config
-#     data:
-#       alertmanager-configs.yaml: |
-#         alertmanagers:
-#         - static_configs: ["alertmanager-dns"]
-#           scheme: http
-#           timeout: 30s
-#           api_version: v1
+  alertmanager:
+    enabled: true
+    config:
+      global:
+        resolve_timeout: 5m
+      inhibit_rules:
+        - source_matchers:
+            - 'severity = critical'
+          target_matchers:
+            - 'severity =~ warning|info'
+          equal:
+            - 'namespace'
+            - 'alertname'
+        - source_matchers:
+            - 'severity = warning'
+          target_matchers:
+            - 'severity = info'
+          equal:
+            - 'namespace'
+            - 'alertname'
+        - source_matchers:
+            - 'alertname = InfoInhibitor'
+          target_matchers:
+            - 'severity = info'
+          equal:
+            - 'namespace'
+      route:
+        group_by: ['namespace','cluster']
+        group_wait: 30s
+        group_interval: 5m
+        repeat_interval: 5h
+        receiver: 'moskitor'
+        routes:
+        - receiver: 'null'
+          matchers:
+            - alertname =~ "InfoInhibitor|Watchdog"
+        #   continue: true
+        # - receiver: 'null'
+        #   # matchers:
+        #   #   - alertname =~ "InfoInhibitor|Watchdog"
+      receivers:
+      - name: 'null'
+      - name: moskitor
+        webhook_configs:
+          - url: 
+
+      templates:
+      - '/etc/alertmanager/config/*.tmpl'
+
+  defaultRules:
+    create: true
+    rules:
+      alertmanager: false
+      etcd: false
+      general: false
+      kubeControllerManager: false
+      kubelet: false
+      kubeProxy: false
+      kubeSchedulerAlerting: false
+      kubeSchedulerRecording: false
+      prometheus: false
+
+  prometheus:
+    thanosService:
+      enabled: true 
+    thanosServiceMonitor:
+      enabled: true
+      interval: 5s
+    #Enabling this creates a service to expose thanos-sidecar outside the cluster.
+    thanosServiceExternal:
+      enabled: false
+    prometheusSpec:
+      thanos:
+        objectStorageConfig:
+          existingSecret:
+            key: 
+            name: 
+      externalLabels:
+        cluster: "thanos-cluster"
+      storageSpec:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: default
+              accessModes: ["ReadWriteOnce"]
+              resources:
+                requests:
+                  storage: 10Gi
+      additionalScrapeConfigs:
+      - job_name: 'envoy-sidecar'
+        kubernetes_sd_configs:
+          - role: pod
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+            action: keep
+            regex: /metrics
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_port]
+            action: keep
+            regex: '20200'
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+            action: keep
+            regex: 'true'
+          - action: labelmap
+            regex: __meta_kubernetes_pod_label_(.+)
+          - source_labels: [__meta_kubernetes_pod_ip]
+            action: replace
+            target_label: __address__
+            regex: (.+)
+            replacement: $1:20200
+          - action: labeldrop
+            regex: __meta_kubernetes_pod_annotation_.*
+
+  prometheusOperator:
+    revisionHistoryLimit: 3
+
+  kube-state-metrics:
+    prometheus:
+      monitor:
+        enabled: true
+        additionalLabels:
+          release: kube-prometheus-stack
+    selfMonitor:
+      enabled: true

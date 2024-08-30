@@ -1,37 +1,37 @@
-# prometheus.yaml 
+env: dev
+kube-prometheus-stack:
+  defaultRules: # The default rules are turned off because of thanos ruler. 
+    create: false
+  namespaceOverride: "prometheus-monitoring-dev"
+  prometheus:
+    thanosService:
+      enabled: true
+    thanosServiceMonitor:
+      enabled: true
+      interval: 5s
+    #Enabling this creates a service to expose thanos-sidecar outside the cluster.
+    thanosServiceExternal:
+      enabled: true
+      type: LoadBalancer
 
-grafana:
-  enabled: false
+    prometheusSpec:
+      thanos:
+        objectStorageConfig:
+          existingSecret:
+            key: thanos.yaml
+            name: thanos-objstore-config
+      externalLabels:
+        cluster: ""
 
-alertmanager:
-  enabled: false
+  prometheusOperator:
+    thanosImage:
+      registry: quay.io
+      repository: thanos/thanos
+      tag: v0.34.1  
+  
+  grafana:
+    enabled: false
 
-prometheus:
-  thanosService:
-    enabled: true
-    type: ClusterIP
-   
-  thanosServiceMonitor:
-    enabled: true
-    interval: 5s
-
-  # Enabling this creates a service to expose thanos-sidecar outside the cluster.
-  # thanosServiceExternal:
-  #   enabled: false
-  #   type: LoadBalancer
-   
-  # prometheusSpec:
-  #   thanos:
-  #     objectStorageConfig:
-  #       key: thanos.yaml
-  #       name: thanos-objstore-config
-   
-prometheusOperator:
-  thanosImage:
-    registry: quay.io
-    repository: thanos/thanos
-    tag: v0.32.2
-   
-kubelet:
-  serviceMonitor:
-    https: false
+  alertmanager:
+    enabled: false
+  
