@@ -1523,7 +1523,6 @@ groups:
     labels:
       severity: warning
 
-
 ### Kubernetes storage
 
 - name: kubernetes-storage
@@ -1536,7 +1535,7 @@ groups:
       kubelet_volume_stats_available_bytes{job="kubelet"}
         /
       kubelet_volume_stats_capacity_bytes{job="kubelet"}
-        < 0.03
+        < 0.1
     for: "1m"
     labels:
       severity: "critical"
