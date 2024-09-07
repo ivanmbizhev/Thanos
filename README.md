@@ -6,3 +6,5 @@ The project contains three directories which include both the terraform code, ku
 The terraform code creates and AKS cluster with predifined settings.
 The prometheus configuration have been made to deploy all of the kube-prometheus-stack with a grafana accessible using AzureAD
 The configuration are made for a production environment and the ruler is set to read the ruler.yml file.
+
+![alt text](Thanos Diagram.drawio.png)
