@@ -1,10 +1,4 @@
-app:
-  project: cpaas-monitoring
-  environment: "thanos"
-  name: "kube-prometheus-stack"
-
-env: thanos
-
+# Configuration for kube-prometheus-stack
 kube-prometheus-stack:
   grafana:
     enabled: true
@@ -28,7 +22,7 @@ kube-prometheus-stack:
       size: 5G
     grafana.ini:
       server: 
-        root_url: https://grafana./
+        root_url:
       auth.azuread:
         name: Azure AD
         enabled: true
@@ -55,8 +49,6 @@ kube-prometheus-stack:
             editable: true
             options:
               path: /var/lib/grafana/dashboards/grafana-dashboards-kubernetes
-    dashboards:
-
 
   alertmanager:
     enabled: true
@@ -89,26 +81,36 @@ kube-prometheus-stack:
         group_wait: 30s
         group_interval: 5m
         repeat_interval: 5h
-        receiver: 'moskitor'
+        receiver: 'null'
         routes:
-        - receiver: 'null'
+        - receiver: 'pager1'
+          group_by: ['cluster']
+          # group_by:
+          #   - alertname
           matchers:
-            - alertname =~ "InfoInhibitor|Watchdog"
-        #   continue: true
-        # - receiver: 'null'
-        #   # matchers:
-        #   #   - alertname =~ "InfoInhibitor|Watchdog"
+            - cluster =~ "prod"
+            # - alertname =~ "InfoInhibitor|Watchdog"
+        - receiver: 'pager2'
+          group_by: ['cluster']
+          matchers:
+            - cluster =~ "qa"
+            # - alertname =~ "InfoInhibitor|Watchdog"
+
       receivers:
       - name: 'null'
-      - name: moskitor
+      - name: 'pager1'
         webhook_configs:
           - url: 
-
+            send_resolved: true
+      - name: pager2
+        webhook_configs:
+          - url: 
+            send_resolved: true
       templates:
       - '/etc/alertmanager/config/*.tmpl'
 
   defaultRules:
-    create: true
+    create: false
     rules:
       alertmanager: false
       etcd: false
@@ -119,6 +121,8 @@ kube-prometheus-stack:
       kubeSchedulerAlerting: false
       kubeSchedulerRecording: false
       prometheus: false
+    disabled:
+      KubeletPodStartUpLatencyHigh: true
 
   prometheus:
     thanosService:
@@ -130,11 +134,12 @@ kube-prometheus-stack:
     thanosServiceExternal:
       enabled: false
     prometheusSpec:
+      enableRemoteWriteReceiver: true
       thanos:
         objectStorageConfig:
           existingSecret:
-            key: 
-            name: 
+            key: thanos.yaml
+            name: thanos-objstore-config
       externalLabels:
         cluster: "thanos-cluster"
       storageSpec:
@@ -145,29 +150,6 @@ kube-prometheus-stack:
               resources:
                 requests:
                   storage: 10Gi
-      additionalScrapeConfigs:
-      - job_name: 'envoy-sidecar'
-        kubernetes_sd_configs:
-          - role: pod
-        relabel_configs:
-          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
-            action: keep
-            regex: /metrics
-          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_port]
-            action: keep
-            regex: '20200'
-          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
-            action: keep
-            regex: 'true'
-          - action: labelmap
-            regex: __meta_kubernetes_pod_label_(.+)
-          - source_labels: [__meta_kubernetes_pod_ip]
-            action: replace
-            target_label: __address__
-            regex: (.+)
-            replacement: $1:20200
-          - action: labeldrop
-            regex: __meta_kubernetes_pod_annotation_.*
 
   prometheusOperator:
     revisionHistoryLimit: 3

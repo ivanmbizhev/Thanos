@@ -1,85 +1,96 @@
-app:
-  project: cpaas-monitoring
-  environment: "thanos"
-  name: "thanos"
-
-metrics:
-  enabled: true
-  serviceMonitor:
+thanos:
+  metrics:
     enabled: true
-    namespace: "monitoring"
-    labels: 
-      release: "kube-prometheus-stack"
+    serviceMonitor:
+      enabled: true
+      namespace: "monitoring"
+      labels: 
+        release: "kube-prometheus-stack"
 
-objstoreConfig: |-
-  type: AZURE
-  config:
-    storage_account: ''
-    storage_account_key: ''
-    container: ''
-storegateway:
-  enabled: true # Set to true to enable the Store Gateway
-  replicaCount: 2
-  persistence:
-    size: 20Gi
-  # resourcesPreset: "2xlarge"
-  resources:
-    requests:
-      cpu: 2
-      ephemeral-storage: 50Mi
-      memory: 4Gi
-    limits:
-      cpu: 4
-      ephemeral-storage: 1Gi
-      memory: 10Gi
-  sharded:
-    enabled: false
-  readinessProbe:
-    timeoutSeconds: 60
-compactor:
-  enabled: true
-  resourcesPreset: "large"
-  persistence:
-    size: 20Gi
-  retentionResolutionRaw: 60d
-  retentionResolution5m: 90d
-  retentionResolution1h: 90d
-bucketweb:
-  enabled: true
-  resourcesPreset: "medium"
-query:
-  extraFlags:
-    - --query.auto-downsampling
-  stores: # Here you can add all of the cluster we'll be monitoring. The ip is the kube-prometheus-stack-thanos-external's external-ip
-    - 0.0.0.0:10901 # dev-reg
-  replicaLabel: prometheus_replica
-  dnsDiscovery:
+  objstoreConfig: |-
+    type: AZURE
+    config:
+      storage_account: 'thanos'
+      storage_account_key: ''
+      container: 'thanos-container'
+
+  storegateway:
+    enabled: true # Set to true to enable the Store Gateway
+    replicaCount: 2 # If reaching a count of 10 clusters increase by 3 or if you detect OOM killed.
+    persistence:
+      size: 50Gi 
+    persistentVolumeClaimRetentionPolicy:
+      enabled: true
+    # resourcesPreset: "2xlarge"
+    resources:
+      requests:
+        cpu: 2
+        ephemeral-storage: 50Mi
+        memory: 8Gi
+      limits:
+        cpu: 4
+        ephemeral-storage: 1Gi
+        memory: 12Gi
+    sharded:
+      enabled: false
+    readinessProbe:
+      timeoutSeconds: 60
+    extraFlags:
+      - --sync-block-duration=3m
+  compactor:
     enabled: true
-    sidecarsService: "kube-prometheus-stack-thanos-discovery"
-    sidecarsNamespace: "monitoring"
-  # Resources - increase if needed.
-  # resourcesPreset: "xlarge"
-  resources:
-    requests:
-      cpu: 2
-      ephemeral-storage: 50Mi
-      memory: 4Gi
-    limits:
-      cpu: 4
-      ephemeral-storage: 1Gi
-      memory: 10Gi
-  replicaCount: 2
+    concurrency: 2
+    resourcesPreset: "large"
+    persistence:
+      size: 20Gi
+    consistencyDelay: 15m
+    retentionResolutionRaw: 30d
+    retentionResolution5m: 60d
+    retentionResolution1h: 90d
+    extraFlags:
+      - --deduplication.replica-label=replica
+      - --block-files-concurrency=2
+      - --downsample.concurrency=2
+      - --delete-delay=12h
+  bucketweb:
+    enabled: true
+    resourcesPreset: "medium"
+  query:
+    extraFlags:
+      - --query.auto-downsampling
+    stores: # Here you can add all of the cluster we'll be monitoring. The ip is the kube-prometheus-stack-thanos-external's external-ip
+      - http://kube-prometheus-stack-thanos-storegateway.monitoring.svc.cluster.local:10901
+    replicaLabel: 
+      - prometheus_replica
+      - replica
+      - prometheus
+    dnsDiscovery:
+      enabled: true
+      sidecarsService: "kube-prometheus-stack-thanos-discovery"
+      sidecarsNamespace: "monitoring"
+    # Resources - increase if needed.
+    # resourcesPreset: "xlarge"
+    resources:
+      requests:
+        cpu: 2
+        ephemeral-storage: 50Mi
+        memory: 4Gi
+      limits:
+        cpu: 4
+        ephemeral-storage: 1Gi
+        memory: 10Gi
+    replicaCount: 2
 
-queryFrontend:
-  resourcesPreset: "xlarge"
-  service:
-    type: NodePort
+  queryFrontend:
+    resourcesPreset: "xlarge"
+    service:
+      type: NodePort
 
-ruler:
-  enabled: true
-  alertmanagers:
-    - http://kube-prometheus-stack-alertmanager.monitoring.svc.cluster.local:9093
-  existingConfigmap: "thanos-ruler-config"
-  resourcesPreset: "large"
-  service:
-    type: NodePort
+  ruler:
+    enabled: true
+    alertmanagers:
+      - http://kube-prometheus-stack-alertmanager.monitoring.svc.cluster.local:9093
+    existingConfigmap: "thanos-ruler-config"
+    resourcesPreset: "large"
+    service:
+      type: NodePort

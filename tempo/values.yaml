@@ -1,0 +1,132 @@
+tempo-distributed:
+  storage: 
+    trace: 
+      backend: azure 
+      azure: 
+        container_name: tempo-container 
+        storage_account_name: cpaastempo 
+        storage_account_key: ${STORAGE_ACCOUNT_ACCESS_KEY}
+
+  distributor: 
+    config:
+      log_received_spans: 
+        enabled: false 
+    extraArgs: 
+    - "-config.expand-env=true" 
+    extraEnv: 
+    - name: STORAGE_ACCOUNT_ACCESS_KEY 
+      valueFrom: 
+        secretKeyRef: 
+          name: tempo-traces-stg-key 
+          key: tempo-traces-key   
+    service:
+      type: LoadBalancer
+
+  compactor: 
+    extraArgs: 
+    - "-config.expand-env=true" 
+    extraEnv: 
+    - name: STORAGE_ACCOUNT_ACCESS_KEY 
+      valueFrom: 
+        secretKeyRef: 
+          name: tempo-traces-stg-key 
+          key: tempo-traces-key   
+
+  ingester: 
+    extraArgs: 
+    - "-config.expand-env=true" 
+    extraEnv: 
+    - name: STORAGE_ACCOUNT_ACCESS_KEY 
+      valueFrom: 
+        secretKeyRef: 
+          name: tempo-traces-stg-key 
+          key: tempo-traces-key   
+
+  querier: 
+    extraArgs: 
+    - "-config.expand-env=true" 
+    extraEnv: 
+    - name: STORAGE_ACCOUNT_ACCESS_KEY 
+      valueFrom: 
+        secretKeyRef: 
+          name: tempo-traces-stg-key 
+          key: tempo-traces-key 
+
+  queryFrontend: 
+    extraArgs: 
+    - "-config.expand-env=true" 
+    extraEnv: 
+    - name: STORAGE_ACCOUNT_ACCESS_KEY 
+      valueFrom: 
+        secretKeyRef: 
+          name: tempo-traces-stg-key 
+          key: tempo-traces-key 
+
+  traces: 
+    otlp: 
+      grpc: 
+        enabled: true 
+      http: 
+        enabled: true 
+    # zipkin: 
+    #   enabled: false 
+    # jaeger: 
+    #   thriftHttp: 
+    #     enabled: false 
+    opencensus: 
+      enabled: false 
+
+  metricsGenerator:
+    enabled: true
+    extraArgs: 
+    - "-config.expand-env=true" 
+    extraEnv: 
+    - name: STORAGE_ACCOUNT_ACCESS_KEY 
+      valueFrom: 
+        secretKeyRef: 
+          name: tempo-traces-stg-key 
+          key: tempo-traces-key 
+    config:
+      storage:
+        path: /var/tempo/wal
+        remote_write_flush_deadline: 1m
+        remote_write:
+        - url: http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090/api/v1/write  
+          send_exemplars: true
+        wal: null
+      traces_storage:
+        path: /var/tempo/traces
+      # registry:
+      #   # A list of labels that will be added to all generated metrics.
+      #   external_labels:
+      #     source: tempo
+      processor:
+        local_blocks:
+          filter_server_spans: false
+          flush_to_storage: true
+
+  global_overrides:
+    defaults:
+      metrics_generator:
+        processors:
+          - service-graphs
+          - span-metrics
+          - local-blocks
+    per_tenant_override_config: /runtime-config/overrides.yaml
+
+
+  overrides:
+    defaults:
+      metrics_generator:
+        processors:
+        - span-metrics
+        - service-graphs
+        - local-blocks
+
+  metaMonitoring:
+    # ServiceMonitor configuration
+    serviceMonitor:
+      # -- If enabled, ServiceMonitor resources for Prometheus Operator are created
+      enabled: true
+      labels: 
+        release: "kube-prometheus-stack"

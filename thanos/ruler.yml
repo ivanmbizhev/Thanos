@@ -2,6 +2,22 @@
 
 groups:
 
+# Test Alarm for pno latency
+
+- name: LatencyAlerts
+  rules:
+  - alert: HighLatencyPerCluster
+    expr: |
+      sum by(cluster) (rate(pno_message_latency_sum[10m])) / sum by(cluster) (rate(pno_message_latency_count[10m])) > 50
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High latency detected in cluster {{ $labels.cluster }}"
+      description: >
+        The average latency in cluster {{ $labels.cluster }} is above 5 seconds 
+        over the last 10 minutes. Current average latency: {{ $value | printf "%.2f" }}s.
+
 # MongoDB
 - name: MongoDB 
   rules:
@@ -177,8 +193,7 @@ groups:
       severity: major
   - alert: '[Kafka] Under Min Isr Partition Count'
     annotations:
-      description: There are {{ $value }} partitions under the min ISR on {{ $labels.kubernetes_pod_name
-        }}
+      description: There are {{ $value }} partitions under the min ISR on {{ $labels.kubernetes_pod_name }}
       summary: Kafka under min ISR partitions
     expr: kafka_server_replicamanager_underminisrpartitioncount > 0
     for: 10s
@@ -205,8 +220,7 @@ groups:
       severity: warning
   - alert: '[Kafka] AvgRequestLatency'
     annotations:
-      description: The average request latency is {{ $value }} on {{ $labels.kubernetes_pod_name
-        }}
+      description: The average request latency is {{ $value }} on {{ $labels.kubernetes_pod_name }}
       summary: Zookeeper average request latency
     expr: zookeeper_avgrequestlatency > 10
     for: 10s
@@ -214,8 +228,7 @@ groups:
       severity: warning
   - alert: '[Kafka] OutstandingRequests'
     annotations:
-      description: There are {{ $value }} outstanding requests on {{ $labels.kubernetes_pod_name
-        }}
+      description: There are {{ $value }} outstanding requests on {{ $labels.kubernetes_pod_name }}
       summary: Zookeeper outstanding requests
     expr: zookeeper_outstandingrequests > 10
     for: 10s
@@ -223,8 +236,7 @@ groups:
       severity: warning
   - alert: '[Kafka Eventhub EDGE] Zookeeper Running Out Of Space less than 15% free'
     annotations:
-      description: There are only {{ $value }} bytes available at {{ $labels.persistentvolumeclaim
-        }} PVC
+      description: There are only {{ $value }} bytes available at {{ $labels.persistentvolumeclaim }} PVC
       summary: Zookeeper is running out of free disk space
     expr: (kubelet_volume_stats_available_bytes{persistentvolumeclaim=~"data-(.+)-zookeeper-[0-9]+"}
       / kubelet_volume_stats_capacity_bytes{persistentvolumeclaim=~"data-(.+)-zookeeper-[0-9]+"})
@@ -394,10 +406,7 @@ groups:
       responsible: DEVOPS
       runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/cputhrottlinghigh
       summary: Processes experience elevated CPU throttling.
-    expr: "sum by (container, pod, namespace) (increase(container_cpu_cfs_throttled_periods_total{container!=\"\",namespace!=\"dataprotection-microsoft\",
-      container!=\"extension-agent\", pod!~\"cp-portal-kong.*\"}[5m])) /\tsum
-      by (container, pod, namespace) (increase(container_cpu_cfs_periods_total[5m]))
-      > (80 / 100)"
+    expr: sum by (cluster, container, pod, namespace) (increase(container_cpu_cfs_throttled_periods_total{container!="",container!="extension-agent",namespace!="dataprotection-microsoft"}[5m])) / sum by (cluster, container, pod, namespace) (increase(container_cpu_cfs_periods_total[5m])) > (80 / 100)
     for: 15m
     labels:
       severity: info
@@ -414,7 +423,7 @@ groups:
           VALUE =  {{ $value  }}
           LABELS =  {{ $labels  }}
       summary: Consul service healthcheck failed (instance  {{ $labels.instance  }})
-    expr: consul_catalog_service_node_healthy == 0
+    expr: consul_catalog_service_node_healthy{cluster!~"cpaas-dev-edg|cpaas-dev-reg"} == 0
     for: 1m
     labels:
       severity: critical
@@ -463,19 +472,11 @@ groups:
     for: 5m
     labels:
       severity: critical
-  - alert: '[Consul] High Request Latency'
-    annotations:
-      description: Envoy High Request Latency
-    expr: |
-      histogram_quantile(0.95,sum(rate(envoy_cluster_upstream_cx_connect_ms_bucket[5m])) by (le)) > 0.25
-    for: 5m
-    labels:
-      severity: critical
   - alert: '[Consul] High Response Latency'
     annotations:
       description: Envoy High Response Latency
     expr: |
-      histogram_quantile(0.95,sum(rate(envoy_cluster_upstream_rq_time_bucket[5m])) by (le)) > 0.25
+      histogram_quantile(0.95, sum by(le, cluster) (rate(envoy_cluster_upstream_rq_time_bucket{cluster!~"cpaas-dev-edg|cpaas-dev-reg"}[5m]))) > 250
     for: 5m
     labels:
       severity: critical
@@ -483,8 +484,7 @@ groups:
     annotations:
       description: Latency exceeding 100ms for the past 5 minutes.
       summary: High request latency on Envoy
-    expr: envoy_http_downstream_rq_time_bucket{job="envoy-sidecar", le="0.5"} >
-      0.1
+    expr: envoy_http_downstream_rq_time_bucket{job="envoy-sidecar", le="0.5", cluster!~"cpaas-dev-edg|cpaas-dev-reg"} > 0.1
     for: 5m
     labels:
       severity: warning
@@ -492,7 +492,7 @@ groups:
     annotations:
       description: Error rate exceeding 5% for the past 10 minutes.
       summary: High error rate on Envoy
-    expr: irate(envoy_http_downstream_rq_xx{job="envoy-sidecar"}[5m]) > 0.05
+    expr: irate(envoy_http_downstream_rq_xx{job="envoy-sidecar", cluster!~"cpaas-dev-edg|cpaas-dev-reg"}[5m]) > 0.1
     for: 10m
     labels:
       severity: critical
@@ -516,7 +516,7 @@ groups:
     annotations:
       description: More than 5 upstream requests dropped for the past 15 minutes.
       summary: High number of dropped requests on Envoy
-    expr: envoy_cluster_upstream_rq_tx_reset{job="envoy-sidecar"} > 5
+    expr: envoy_cluster_upstream_rq_tx_reset{cluster!~"cpaas-dev-edg|cpaas-dev-reg",job="envoy-sidecar"} > 20
     for: 15m
     labels:
       severity: warning
@@ -524,8 +524,7 @@ groups:
     annotations:
       description: Connection failure rate exceeding 10% for the past 15 minutes.
       summary: High connection errors on Envoy
-    expr: irate(envoy_cluster_upstream_cx_connect_fail{job="envoy-sidecar"}[5m])
-      > 0.1
+    expr: irate(envoy_cluster_upstream_cx_connect_fail{job="envoy-sidecar"}[5m]) > 0.1
     for: 15m
     labels:
       severity: warning
@@ -1284,7 +1283,7 @@ groups:
       message: "Pod {{ $labels.namespace }}/{{ $labels.pod }} ({{ $labels.container }}) is restarting {{ printf \"%.2f\" $value }} times / 5 minutes."
       "runbook_url": "https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubepodcrashlooping"
     expr: |
-      rate(kube_pod_container_status_restarts_total{job="kube-state-metrics"}[15m]) * 60 * 5 > 0
+      max_over_time(kube_pod_container_status_waiting_reason{reason="CrashLoopBackOff", job="{{ .* }}", namespace=~"{{ .* }}", cluster!="cpaas-dev-edg", cluster!="cpaas-dev-reg"}[5m]) >= 1
     for: "15m"
     labels:
       severity: "critical"
@@ -1325,15 +1324,7 @@ groups:
       runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubedeploymentreplicasmismatch
       summary: Deployment has not matched the expected number of replicas.
     expr: |-
-      (
-        kube_deployment_spec_replicas{job="kube-state-metrics", namespace=~".*"}
-          >
-        kube_deployment_status_replicas_available{job="kube-state-metrics", namespace=~".*"}
-      ) and (
-        changes(kube_deployment_status_replicas_updated{job="kube-state-metrics", namespace=~".*"}[10m])
-          ==
-        0
-      )
+      (kube_deployment_spec_replicas{job="kube-state-metrics", namespace=~".*", cluster!="cpaas-dev-edg", cluster!="cpaas-dev-reg"} > kube_deployment_status_replicas_available{job="kube-state-metrics", namespace=~".*", cluster!="cpaas-dev-edg", cluster!="cpaas-dev-reg"}) and ( changes(kube_deployment_status_replicas_updated{job="kube-state-metrics", namespace=~".*", cluster!="cpaas-dev-edg", cluster!="cpaas-dev-reg"}[10m]) == 0)
     for: 15m
     labels:
       severity: warning
@@ -1344,15 +1335,7 @@ groups:
       runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubestatefulsetreplicasmismatch
       summary: Deployment has not matched the expected number of replicas.
     expr: |-
-      (
-        kube_statefulset_status_replicas_ready{job="kube-state-metrics", namespace=~".*"}
-          !=
-        kube_statefulset_status_replicas{job="kube-state-metrics", namespace=~".*"}
-      ) and (
-        changes(kube_statefulset_status_replicas_updated{job="kube-state-metrics", namespace=~".*"}[10m])
-          ==
-        0
-      )
+      (kube_statefulset_status_replicas_ready{job="kube-state-metrics", namespace=~".*", cluster!="cpaas-dev-edg", cluster!="cpaas-dev-reg"} != kube_statefulset_status_replicas{job="kube-state-metrics", namespace=~".*", cluster!="cpaas-dev-edg", cluster!="cpaas-dev-reg"}) and (changes(kube_statefulset_status_replicas_updated{job="kube-state-metrics", namespace=~".*", cluster!="cpaas-dev-edg", cluster!="cpaas-dev-reg"}[10m]) == 0)
     for: 15m
     labels:
       severity: warning
@@ -1435,8 +1418,7 @@ groups:
         than 1 hour.
       runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubecontainerwaiting
       summary: Pod container waiting longer than 1 hour
-    expr: sum by (namespace, pod, container, cluster) (kube_pod_container_status_waiting_reason{job="kube-state-metrics",
-      namespace=~".*"}) > 0
+    expr: sum by(namespace, pod, container, cluster) (kube_pod_container_status_waiting_reason{reason!="CrashLoopBackOff", job="{{ .* }}", namespace=~"{{ .* }}", cluster!="cpaas-dev-edg", cluster!="cpaas-dev-reg"}) > 0
     for: 1h
     labels:
       severity: warning
@@ -1482,7 +1464,7 @@ groups:
         complete. Removing failed job after investigation should clear this alert.
       runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubejobfailed
       summary: Job failed to complete.
-    expr: kube_job_failed{job="kube-state-metrics", namespace=~".*"}  > 0
+    expr: kube_job_failed{job="kube-state-metrics",namespace=~".*", cluster!="cpaas-dev-edg", cluster!="cpaas-dev-reg"} > 0
     for: 15m
     labels:
       severity: warning
@@ -1522,6 +1504,7 @@ groups:
     for: 15m
     labels:
       severity: warning
+
 
 ### Kubernetes storage
 
@@ -1618,7 +1601,7 @@ groups:
         components running.
       runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeversionmismatch
       summary: Different semantic versions of Kubernetes components running.
-    expr: count by (cluster) (count by (git_version, cluster) (label_replace(kubernetes_build_info{job!~"kube-dns|coredns"},"git_version","$1","git_version","(v[0-9]*.[0-9]*).*"))) > 1
+    expr: count by (cluster) (count by (git_version, cluster) (label_replace(kubernetes_build_info{job!~"kube-dns|coredns", cluster!="cpaas-dev-edg"},"git_version","$1","git_version","(v[0-9]*.[0-9]*).*"))) > 1
     for: 15m
     labels:
       severity: warning
@@ -2135,7 +2118,7 @@ groups:
         order.
       runbook_url: https://runbooks.prometheus-operator.dev/runbooks/prometheus/prometheusoutofordertimestamps
       summary: Prometheus drops samples with out-of-order timestamps.
-    expr: rate(prometheus_target_scrapes_sample_out_of_order_total{job="kube-prometheus-stack-prometheus"}[5m]) > 0
+    expr: sum by(cluster) (rate(prometheus_target_scrapes_sample_out_of_order_total{job="kube-prometheus-stack-prometheus", cluster!~"cpaas-dev-edg|cpaas-dev-reg"}[5m]) > 0)
     for: 10m
     labels:
       severity: warning
@@ -2374,7 +2357,7 @@ groups:
     annotations:
       description: Number of failed request is increasing
     expr: |
-      sum by (code)(irate(keycloak_response_errors[30m])) > 3
+      sum by (code, cluster) (increase(keycloak_response_errors_total[30m])) > 200
     for: 10m
     labels:
       severity: major
@@ -2437,7 +2420,7 @@ groups:
       description: There were unroutable message within the last 5 minutes in
         RabbitMQ cluster
     expr: |
-      sum (increase(rabbitmq_channel_messages_unroutable_dropped_total[5m])) >= 1 or sum (increase(rabbitmq_channel_messages_unroutable_returned_total[5m])) >= 1
+      sum(increase(rabbitmq_channel_messages_unroutable_dropped_total[5m])) by (cluster) >= 1 or sum(increase(rabbitmq_channel_messages_unroutable_returned_total[5m])) by (cluster) >= 1
     for: 5m
     labels:
       severity: warning
@@ -2457,33 +2440,23 @@ groups:
     for: 10m
     labels:
       severity: warning
-  - alert: IN TEST [RabbitMQ] RabbitMQ messages queue ready to be sent is to High
+  - alert: RabbitMQ messages queue ready to be sent is to High
     annotations:
       description: Messages in queue with status ready is higher than expected,  please
         investigate
       responsible: DevOPS
     expr: |
-      sum(rabbitmq_queue_messages_ready) > 20000
+      sum by(cluster) (rabbitmq_queue_messages_ready) > 50000
     for: 5m
     labels:
       severity: warning
-  - alert: IN TEST [RabbitMQ] RabbitMQ queued messages not acknowledged
+  - alert: RabbitMQ queued messages not acknowledged
     annotations:
       description: Messages in queue with and not acknowledged is higher than
         expected,  please investigate
       responsible: DevOPS
     expr: |
-      sum(rabbitmq_queue_messages_unacked) > 100
-    for: 5m
-    labels:
-      severity: warning
-  - alert: IN TEST [RabbitMQ] RabbitMQ queued messages not acknowledged
-    annotations:
-      description: Messages in queue with and not acknowledged is higher than
-        expected,  please investigate
-      responsible: DevOPS
-    expr: |
-      sum(rabbitmq_queue_messages_unacked) > 100
+      sum by(cluster) (rabbitmq_queue_messages_unacked) > 15000
     for: 5m
     labels:
       severity: warning
@@ -2496,6 +2469,17 @@ groups:
     expr: |
       sum(increase(rabbitmq_global_messages_received_total[3s])) > 10000
     for: 5m
+    labels:
+      severity: warning
+  - alert: '[RabbitMQ] Pod Memory Usage above - Warning'
+    annotations:
+      description: |
+        RabbitMQ pod {{ $labels.pod }} in namespace delivery-gate-prod is using more than 500MB of memory. Monitor to ensure we notice if the memory usage Alarm Critical fires. Notify DevOps, no further action needed at this point.
+      summary: |
+        RabbitMQ pod memory usage warning.
+    expr: |
+      max by(pod) (container_memory_usage_bytes{namespace="delivery-gate-prod", pod=~".*-rabbitmq-cluster-server-.*"}) / 1024 / 1024 > 600
+    for: 10m
     labels:
       severity: warning
 
@@ -2668,7 +2652,7 @@ groups:
     annotations:
       description: Low keyspace hit ratio
     expr: |
-      (rate(redis_keyspace_hits_total[5m]) / ( rate(redis_keyspace_misses_total[5m]) + rate(redis_keyspace_hits_total[5m]) )) < 0.9
+      (rate(redis_keyspace_hits_total[10m]) / (rate(redis_keyspace_misses_total[10m]) + rate(redis_keyspace_hits_total[10m]))) < 0.85 and rate(redis_keyspace_misses_total[10m]) > 10
     for: 30m
     labels:
       severity: warning

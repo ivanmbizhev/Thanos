@@ -1,0 +1,42 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+# trigger:
+#   branches:
+#     include:
+#       - main
+  # paths:
+  #   include:
+  #     - ruler.yml 
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  azureServiceConnectionId: Thanos
+  resourceGroup: Cpass-Thanos-cluster
+  k8sCluster: cpass-thanos-cluster-aks
+  k8sNamespace: observability
+  configFilePath: '$(Build.SourcesDirectory)/ruler.yml'
+
+steps:
+- task: AzureCLI@2
+  displayName: 'Configure kubectl'
+  inputs:
+    azureSubscription: '$(azureServiceConnectionId)'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      az aks get-credentials --resource-group $(resourceGroup) --name $(k8sCluster)
+
+- task: AzureCLI@2
+  displayName: 'Run kubectl commands'
+  inputs:
+    azureSubscription: '$(azureServiceConnectionId)'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      kubectl -n $(k8sNamespace) create configmap thanos-ruler-config --from-file=$(configFilePath) -o yaml --dry-run=client | kubectl apply -f -
+      kubectl -n $(k8sNamespace) delete pod thanos-ruler-0
