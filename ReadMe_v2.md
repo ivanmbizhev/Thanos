@@ -1,4 +1,4 @@
-### Treat with great care! This whole configuration was made with the idea of using ArgoCD if using pipelines managing the whole architecture will be harder and prone to issues and human error.
+### Treat with great care! This whole configuration was made with the idea of using ArgoCD if using pipees managing the whole architecture will be harder and prone to issues and human error.
 
 # 🚀 Observability & GitOps Stack with Thanos, Kube-Prometheus-Stack, Loki, Tempo & ArgoCD
 
